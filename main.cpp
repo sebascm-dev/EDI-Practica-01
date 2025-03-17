@@ -86,7 +86,9 @@ int main() {
 
     Torneo t1;
     t1.CrearFichero("Open Huelva");
-    t1.mostrar(20);
+    t1.mostrar(2);
+
+    // Esto es una prueba para ver si se guarda en github
 
     return 0;
 }
