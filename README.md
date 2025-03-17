@@ -36,15 +36,7 @@ Añade todos los archivos:
 git add .
 ```
 
-O añade archivos específicos:
-
-```bash
-git add archivo1.py archivo2.py
-```
-
 ### 5. Confirmar (commit) los cambios
-
-Realiza un commit con un mensaje descriptivo:
 
 ```bash
 git commit -m "Descripción de los cambios realizados"
@@ -52,13 +44,7 @@ git commit -m "Descripción de los cambios realizados"
 
 ### 6. Subir (push) los cambios al repositorio remoto
 
-Para la primera vez:
-
-```bash
-git push -u origin master
-```
-
-o si usas la rama 'main':
+Para la primera vez del repositorio:
 
 ```bash
 git push -u origin main
