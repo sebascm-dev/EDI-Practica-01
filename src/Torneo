@@ -1,0 +1,6 @@
+#include "Torneo."
+
+Torneo::Torneo()
+{
+    //ctor
+}

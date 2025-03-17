@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1742252066 source:c:\users\spano\downloads\p1\main.cpp
+	<iostream>
+	<fstream>
+	"Torneo.h"
+
+1742251933 c:\users\spano\downloads\p1\include\torneo.h
+	<fstream>
+
+1742251933 source:c:\users\spano\downloads\p1\src\torneo.cpp
+	<iostream>
+	<fstream>
+	<cstring>
+	"Torneo.h"
+

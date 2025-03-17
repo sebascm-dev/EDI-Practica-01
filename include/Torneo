@@ -1,0 +1,15 @@
+#ifndef TORNEO_
+#define TORNEO_
+
+
+class Torneo
+{
+    public:
+        Torneo();
+
+    protected:
+
+    private:
+};
+
+#endif // TORNEO_
