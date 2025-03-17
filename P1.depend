@@ -27,3 +27,17 @@
 	<cstring>
 	"Torneo.h"
 
+1742253604 source:s:\edi-practica-01\main.cpp
+	<iostream>
+	<fstream>
+	"Torneo.h"
+
+1742253544 s:\edi-practica-01\include\torneo.h
+	<fstream>
+
+1742253544 source:s:\edi-practica-01\src\torneo.cpp
+	<iostream>
+	<fstream>
+	<cstring>
+	"Torneo.h"
+

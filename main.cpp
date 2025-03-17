@@ -85,7 +85,7 @@ int main() {
     //menu1();
 
     Torneo t1;
-    t1.CrearFichero("Open Huelva");
+    t1.CrearFichero("Sevilla P1");
     t1.mostrar(14);
 
     return 0;
