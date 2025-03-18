@@ -1,11 +1,16 @@
+// INCLUDES IMPORTANTES
 #include <iostream>
 #include <fstream>
 #include <cstring>
+
+// INCLUDES FICHEROS
 #include "Torneo.h"
 
 using namespace std;
 
-// Constructor y Destructor de la clase Torneo
+
+
+// Constructor y Destructor Clase Torneo
 Torneo::Torneo(){}
 Torneo::~Torneo(){}
 
