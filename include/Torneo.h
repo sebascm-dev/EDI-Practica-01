@@ -34,7 +34,7 @@ public:
     void getNomFichero(cadena nombre);
     void putNomTorneo(cadena nombre);
     void putNomFichero(cadena nombre);
-    void CrearFichero(char nombreFichero[]);
+    void crearFichero(char nombreFichero[]);
     void mostrar(float hdcp);
     Golfista consultar(int posicion);
     int buscar(cadena licencia);

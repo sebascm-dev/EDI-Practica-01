@@ -31,7 +31,7 @@ void Torneo::putNomFichero(cadena nombre) { strcpy(nomFichero, nombre); }
 
 
 // Gestión de Ficheros
-void Torneo::CrearFichero(char nombreFichero[]) {
+void Torneo::crearFichero(char nombreFichero[]) {
 
     fichero.open(nombreFichero, ios::binary | ios::in | ios::out);
 
