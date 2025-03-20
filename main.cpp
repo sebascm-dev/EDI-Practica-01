@@ -1,117 +1,177 @@
+// INCLUDES IMPORTANTES
 #include <iostream>
 #include <fstream>
 #include <cstring>
 
+// INCLUDES DE FICHEROS DE CLASES
 #include "Torneo.h"
 
+// USO DEL NAMESPACE
 using namespace std;
 
+// CONSTANTES DE REMPLAZO
 #define N 10
 #define SALTO 4
 
+// DEFINICION DE TIPOS
 typedef char cadena[30];
 
-fstream fichero("torneo.dat", ios::binary | ios::in | ios::out);
-
+// VARIABLES
+int numTorneos;
 cadena nuevoNombreTorneo, nuevoNombreFichero;
-int numTorneos = 0;
+Torneo* tablaTorneos = new Torneo[N];
 
-// Función para leer el número de torneos desde el archivo
-void cargarTorneosDesdeFichero() {
-    fstream fichero("torneo.dat", ios::binary | ios::in | ios::ate);
 
-    if (fichero) {
-        numTorneos = fichero.tellg() / sizeof(Torneo);
+
+// CREANDO STRUCT PARA GUARDAR LOS TORNEOS DADOS DE ALTA EN TORNEO.DAT
+struct TorneoAux
+{
+    int numGolfistasAux;
+    cadena nomTorneoAux;
+    cadena nomFicheroAux;
+};
+
+
+
+// FUNCION PARA CREAR TORNEO.DAT EN CASO DE QUE NO EXISTA Y SI EXISTE LEER DATOS Y VOLCARLOS EN LA TABLA Y SABER CUANTOS TORNEOS HAY DENTRO DEL FICHERO
+void crearFicheroTorneo()
+{
+    fstream fichero;
+    fichero.open("torneo.dat", ios::binary | ios::in | ios::out);
+
+    if (fichero.fail())
+    {
+        fichero.clear();
         fichero.close();
-    } else {
-        numTorneos = 0;
+
+        fichero.open("torneo.dat", ios::binary | ios::out);
+        fichero.close();
+
+        fichero.open("torneo.dat", ios::binary | ios::in | ios::out);
+        cout << "\n[+] Fichero de torneos creado: torneo.dat\n" << endl;
+
+    }
+    else
+    {
+        fichero.seekg(0, ios::end);
+        int tamFichero = fichero.tellg();
+        numTorneos = tamFichero / sizeof(TorneoAux);
+
+        fichero.seekg(0, ios::beg);
+        for(int i = 0; i < numTorneos; i++)
+        {
+            fichero.read((char*) &tablaTorneos[i], sizeof(TorneoAux));
+        }
     }
 }
 
-void menuPrincipal() {
+
+
+
+void menuPrincipal()
+{
     int opcMenuPrincipal;
 
-    do {
-        cout << "MENU PRINCIPAL" << endl;
-        cout << "Torneos Activos: " << numTorneos << endl;
-        cout << "1. Listado de Torneos" << endl;
-        cout << "2. Alta Torneo" << endl;
-        cout << "3. Elegir torneo" << endl;
-        cout << "4. Salir" << endl;
+    do{
+        system("cls");
+        cout << "=== TORNEOS DE GOLF ===" << endl;
+        cout << "-----------------------" << endl;
+        cout << "Torneos: " << numTorneos << endl;
         cout << endl;
-
-        cout << "Elegir una opcion: ";
+        cout << "\t1. Listado de Torneos" << endl;
+        cout << "\t2. Alta Torneo" << endl;
+        cout << "\t3. Elegir torneo" << endl;
+        cout << "\t4. Salir" << endl;
+        cout << endl;
+        cout << "Indique la opcion deseada: ";
         cin >> opcMenuPrincipal;
         cin.ignore();
 
-        switch (opcMenuPrincipal) {
-            case 1:
-                cout << "Opción 1" << endl;
-                break;
+        switch (opcMenuPrincipal)
+        {
+        case 1:
+            system("cls");
+            cout << endl;
+            cout << "=== LISTADO DE TORNEOS ACTIVOS ===" << endl;
+            cout << endl;
 
-            case 2:
-                system("cls");
-                cout << "\n === DAR UN TORNEO DE ALTA ===" << endl;
+            for(int i = 0; i < numTorneos; i++){
+                cadena nombre;
+                tablaTorneos[i].getNomTorneo(nombre);
+                cout << nombre << endl;
+            }
 
-                fichero.open("torneo.dat", ios::binary | ios::in | ios::out);
+            system("pause");
+            break;
 
-                if (fichero.fail()) {
+        case 2:
+        {
+            system("cls");
+            cout << endl;
+            cout << "=== DAR UN TORNEO DE ALTA ===" << endl;
+            cout << endl;
 
-                    fichero.clear();
-                    fichero.close();
-                    fichero.open("torneo.dat", ios::binary | ios::out);
-                    fichero.close();
-                    fichero.open("torneo.dat", ios::binary | ios::in | ios::out);
-                    cout << "[+] Fichero de torneos creado: torneo.dat" << endl;
+            Torneo nuevoTorneo;
+            TorneoAux Taux;
 
-                } else {
+            cout << "[/] Introduzca nombre del torneo a dar de alta: ";
+            cin.getline(nuevoNombreTorneo, 30);
+            nuevoTorneo.putNomTorneo(nuevoNombreTorneo);
 
-                    Torneo nuevoTorneo;
+            cout << "[/] Introduzca nombre del fichero para el torneo: ";
+            cin.getline(nuevoNombreFichero, 30);
 
-                    cout << "[/] Introduzca nombre del torneo a dar de alta: ";
-                    cin.getline(nuevoNombreTorneo, 30);
-                    nuevoTorneo.putNomTorneo(nuevoNombreTorneo);
+            strcat(nuevoNombreFichero, ".dat");
+            nuevoTorneo.putNomFichero(nuevoNombreFichero);
 
-                    cout << "[/] Introduzca nombre del fichero para el torneo: ";
-                    cin.getline(nuevoNombreFichero, 30);
+            cout << endl;
+            cout << "[+] Torneo " << nuevoNombreFichero << " creado correctamente!" << endl;
+            nuevoTorneo.crearFichero(nuevoNombreFichero);
 
-                    strcat(nuevoNombreFichero, ".dat");
-                    nuevoTorneo.putNomFichero(nuevoNombreFichero);
+            cout << "[+] Insertando datos del torneo " << nuevoNombreTorneo << " en el fichero torneo.dat" << endl;
+            Taux.numGolfistasAux = nuevoTorneo.getNumGolfistas();
+            strcpy(Taux.nomTorneoAux, nuevoNombreTorneo);
+            strcpy(Taux.nomFicheroAux, nuevoNombreFichero);
 
-                    nuevoTorneo.crearFichero(nuevoNombreFichero);
+            fstream fichero;
+            fichero.open("torneo.dat", ios::binary | ios::in | ios::out);
 
+            fichero.seekp(0, ios::end);
+            fichero.write((char*) &Taux, sizeof(TorneoAux));
 
+            fichero.seekg(0, ios::end);
+            int tamFichero = fichero.tellg();
+            numTorneos = tamFichero / sizeof(TorneoAux);
 
-                    cout << "Insertando el torneo " << nuevoNombreTorneo << " dentro del fichero torneo.dat" << endl;
+            cout << endl;
+            cout << "[OK] Operacion de Alta Torneo Completada!!!" << endl;
+            system("pause");
 
-                    fichero.seekp(numTorneos * sizeof(Torneo), ios::beg);
-                    fichero.write((char*) &nuevoTorneo, sizeof(Torneo));
+            break;
 
-                    numTorneos++;
-
-                }
-
-                fichero.close();
-                break;
-
-            case 3:
-                cout << "Opción 3" << endl;
-                break;
-
-            case 4:
-                cout << "Saliendo del programa" << endl;
-                break;
-
-            default:
-                cout << "Introduzca un valor correcto" << endl;
-                break;
         }
-    } while (opcMenuPrincipal != 4);
+
+        case 3:
+            cout << "Opción 3" << endl;
+            break;
+
+        case 4:
+            cout << "Saliendo del programa" << endl;
+            break;
+
+        default:
+            cout << "Introduzca un valor correcto" << endl;
+            break;
+        }
+    }
+    while (opcMenuPrincipal != 4);
 }
 
-int main() {
-    cargarTorneosDesdeFichero();  // Cargar el número de torneos al inicio
+int main()
+{
+    crearFicheroTorneo();
     menuPrincipal();
 
+    delete[] tablaTorneos;
     return 0;
 }

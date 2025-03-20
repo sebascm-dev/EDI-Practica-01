@@ -45,8 +45,6 @@ void Torneo::crearFichero(char nombreFichero[]) {
         fichero.close();
 
         fichero.open(nombreFichero, ios::binary | ios::in | ios::out);
-        cout << "[+] Fichero creado: " << nombreFichero << endl;
-        cout << endl;
     } else {
         fichero.seekg(0);
         fichero.read((char*) &numGolfistas, sizeof(int));
