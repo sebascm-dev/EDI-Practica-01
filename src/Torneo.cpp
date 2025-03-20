@@ -60,6 +60,49 @@ void Torneo::crearFichero(char nombreFichero[]) {
 
 // Método Mostrar (Por Hacer)
 void Torneo::mostrar(float hdcp) {
+
+    if(fichero.fail()) {
+        cout << "[!] ERROR: No se pudo abrir el fichero " << nomFichero << endl;
+        return;
+    }
+
+    fichero.seekg(0, ios::beg);
+    fichero.read((char*) &numGolfistas, sizeof(int));
+
+    if(numGolfistas == 0) {
+        cout << "[i] No hay golfistas registrados en este torneo." << endl;
+        return;
+    }
+
+    cout << "=== LISTADO DE GOLFISTAS ";
+    if(hdcp == -1) {
+        cout << "(TODOS) ===" << endl;
+    } else {
+        cout << "(HANDICAP "<< hdcp << ") ===" << endl;
+    }
+
+    Golfista g;
+    int encontrados = 0;
+
+    for(int i = 0; i < numGolfistas; i++) {
+        fichero.read((char*) &g, sizeof(Golfista));
+        cout << endl;
+        cout << "Licencia: " << g.licencia << endl;
+        cout << "Handicap: " << g.handicap << endl;
+        cout << "Nombre: " << g.nombre << endl;
+        cout << "Apellidos: " << g.apellidos << endl;
+        cout << "Golpes: " << g.golpes << endl;
+        cout << "Resultado: " << g.resultado << endl;
+        encontrados++;
+    }
+
+    if(encontrados == 0) {
+        cout << "[i] No se encontraron golfistas con el handicap: " << hdcp << endl;
+    } else {
+        cout << "=============================" << endl;
+        cout << "[i] Total de Golfistas Mostrados: " << encontrados << endl;
+    }
+
 }
 
 
