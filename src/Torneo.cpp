@@ -126,8 +126,32 @@ Golfista Torneo::consultar(int posicion) {
 
 
 
-// Método Buscar (Por Hacer)
+// Método Buscar (PREGUNTAR AL PROFESOR POR QUE NO ME FUNCIONA CORRECTAMENTE)
 int Torneo::buscar(cadena licencia) {
+
+    fichero.close(); // SI QUITO ESTO ME DA ERROR
+    fichero.open(nomFichero, ios::binary | ios::in); // SI QUITO ESTO ME DA ERROR
+
+    if (numGolfistas == 0) {
+        cout << "[!] No hay golfistas inscritos." << endl;
+        return -1;
+    }
+
+    // Leer el número de golfistas desde el inicio del fichero
+    fichero.seekg(0, ios::beg);
+    fichero.read((char*)&numGolfistas, sizeof(int));
+
+    Golfista g;
+
+    for (int i = 0; i < numGolfistas; i++) {
+        fichero.read((char*)&g, sizeof(Golfista));
+
+        if (strcmp(g.licencia, licencia) == 0) {
+            return (i + 1);
+        }
+    }
+
+    return -1;
 }
 
 

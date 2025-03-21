@@ -178,7 +178,6 @@ void menuPrincipal() {
 
 
 
-
 int main()
 {
 
@@ -196,7 +195,7 @@ int main()
     t1.putNomFichero(nombreFic);
     t1.crearFichero(nombreFic);
 
-    //t1.mostrar(-1);
+    t1.mostrar(-1);
 
 
 
@@ -219,6 +218,20 @@ int main()
         cout << "[i] No se encontró ningún golfista en esa posición." << endl;
     }
     */
+
+
+
+    // PRUEBAS DEL METODO BUSCAR
+    cadena licencia;
+    cout << "\nIndique la licencia a mostar: "; cin.getline(licencia, 30);
+
+    int pos = t1.buscar(licencia);
+
+    if(pos != -1) {
+        cout << "Golfista encontrado en la posicuon: " << pos << endl;
+    } else {
+        cout << "La licencia del golfista no se encuentra..." << endl;
+    }
 
 
 
