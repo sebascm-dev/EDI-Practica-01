@@ -224,7 +224,7 @@ int main()
     //t1.insertar(g2);
     //t1.insertar(g3);
 
-    t1.mostrar(-1);
+    t1.mostrar(8.0);
 
     //menuPrincipal();
 

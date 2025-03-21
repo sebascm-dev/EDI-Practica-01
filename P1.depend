@@ -13,7 +13,7 @@
 	<cstring>
 	"Torneo.h"
 
-1742498591 source:c:\users\spano\downloads\edi-practica-01\main.cpp
+1742557213 source:c:\users\spano\downloads\edi-practica-01\main.cpp
 	<iostream>
 	<fstream>
 	<cstring>
@@ -22,7 +22,7 @@
 1742492290 c:\users\spano\downloads\edi-practica-01\include\torneo.h
 	<fstream>
 
-1742498625 source:c:\users\spano\downloads\edi-practica-01\src\torneo.cpp
+1742557358 source:c:\users\spano\downloads\edi-practica-01\src\torneo.cpp
 	<iostream>
 	<fstream>
 	<cstring>

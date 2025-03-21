@@ -58,7 +58,7 @@ void Torneo::crearFichero(char nombreFichero[]) {
 
 
 
-// Método Mostrar (Por Hacer)
+// Método Mostrar
 void Torneo::mostrar(float hdcp) {
 
     if(fichero.fail()) {
@@ -84,16 +84,17 @@ void Torneo::mostrar(float hdcp) {
     Golfista g;
     int encontrados = 0;
 
-    for(int i = 0; i < numGolfistas; i++) {
-        fichero.read((char*) &g, sizeof(Golfista));
-        cout << endl;
-        cout << "Licencia: " << g.licencia << endl;
-        cout << "Handicap: " << g.handicap << endl;
-        cout << "Nombre: " << g.nombre << endl;
-        cout << "Apellidos: " << g.apellidos << endl;
-        cout << "Golpes: " << g.golpes << endl;
-        cout << "Resultado: " << g.resultado << endl;
-        encontrados++;
+    while(fichero.read((char*) &g, sizeof(Golfista))) {
+        if(hdcp == -1 || g.handicap == hdcp) {
+            cout << endl;
+            cout << "X--- " << g.nombre << " " << g.apellidos << " ---X" << endl;
+            cout << "| Licencia: " << g.licencia << endl;
+            cout << "| Handicap: " << g.handicap << endl;
+            cout << "| Golpes: " << g.golpes << endl;
+            cout << "| Resultado: " << g.resultado << endl;
+            cout << endl;
+            encontrados++;
+        }
     }
 
     if(encontrados == 0) {
@@ -102,7 +103,6 @@ void Torneo::mostrar(float hdcp) {
         cout << "=============================" << endl;
         cout << "[i] Total de Golfistas Mostrados: " << encontrados << endl;
     }
-
 }
 
 
