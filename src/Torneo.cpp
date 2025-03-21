@@ -48,7 +48,7 @@ void Torneo::crearFichero(char nombreFichero[]) {
     } else {
         fichero.seekg(0);
         fichero.read((char*) &numGolfistas, sizeof(int));
-        cout << "[!] Fichero existente: " << nombreFichero << endl;
+        cout << "[!] Fichero: " << nombreFichero << endl;
         cout << "[i] Numero de Golfistas: " << numGolfistas << endl;
         cout << endl;
     }
@@ -107,8 +107,21 @@ void Torneo::mostrar(float hdcp) {
 
 
 
-// Método Consultar (Por Hacer)
+// Método Consultar
 Golfista Torneo::consultar(int posicion) {
+
+    Golfista g;
+
+    if(posicion <= 0 || posicion > numGolfistas) {
+        cout << "[!] ERROR: Posicion invalida. Debe estar entre 1 y " << numGolfistas << endl;
+        return g;
+    }
+
+    fichero.seekg(sizeof(int) + sizeof(Golfista) * (posicion - 1), ios::beg);
+
+    fichero.read((char*) &g, sizeof(Golfista));
+
+    return g;
 }
 
 

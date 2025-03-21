@@ -186,45 +186,41 @@ int main()
 
     Torneo t1;
     cadena nombreTor, nombreFic;
+
+
+
+    // PRUEBAS DEL METODO MOSTRAR Y CREAR FICHERO
     strcpy(nombreTor, "torneo_prueba");
     strcpy(nombreFic, "torneo_prueba.dat");
     t1.putNomTorneo(nombreTor);
     t1.putNomFichero(nombreFic);
     t1.crearFichero(nombreFic);
 
-    // Crear golfistas de prueba
-    Golfista g1, g2, g3;
+    //t1.mostrar(-1);
 
-    // Golfista 1
-    strcpy(g1.licencia, "LIC-001");
-    g1.handicap = 12.5;
-    strcpy(g1.nombre, "Sebastian");
-    strcpy(g1.apellidos, "Contreras Marin");
-    g1.golpes = 0;
-    g1.resultado = 0;
 
-    // Golfista 2
-    strcpy(g2.licencia, "LIC-002");
-    g2.handicap = 8.0;
-    strcpy(g2.nombre, "Antonio");
-    strcpy(g2.apellidos, "Navarro");
-    g2.golpes = 0;
-    g2.resultado = 0;
 
-    // Golfista 3
-    strcpy(g3.licencia, "LIC-003");
-    g3.handicap = 15.0;
-    strcpy(g3.nombre, "Miguel");
-    strcpy(g3.apellidos, "Gomez");
-    g3.golpes = 0;
-    g3.resultado = 0;
+    // PRUEBAS DEL METODO CONSULTAR:
+    /*
+    int pos;
+    cout << "Ingrese la psocion del goldfista a consultar: ";
+    cin >> pos;
 
-    // Insertar golfistas en el torneo
-    //t1.insertar(g1);
-    //t1.insertar(g2);
-    //t1.insertar(g3);
+    Golfista g = t1.consultar(pos);
 
-    t1.mostrar(8.0);
+    if (g.licencia[0] != '\0') {  // Si el objeto no está vacío
+        cout << "\n=== GOLFISTA ENCONTRADO ===" << endl;
+        cout << "Nombre: " << g.nombre << " " << g.apellidos << endl;
+        cout << "Licencia: " << g.licencia << endl;
+        cout << "Handicap: " << g.handicap << endl;
+        cout << "Golpes: " << g.golpes << endl;
+        cout << "Resultado: " << g.resultado << endl;
+    } else {
+        cout << "[i] No se encontró ningún golfista en esa posición." << endl;
+    }
+    */
+
+
 
     //menuPrincipal();
 
