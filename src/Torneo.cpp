@@ -58,8 +58,11 @@ void Torneo::crearFichero(char nombreFichero[]) {
 
 
 
-// Método Mostrar
+// Método Mostrar (PREGUNTAR AL PROFESOR POR QUE NO ME FUNCIONA CORRECTAMENTE SI QUITO EL FICHERO.CLOSE())
 void Torneo::mostrar(float hdcp) {
+
+    fichero.close(); // SI QUITO ESTO ME DA ERROR
+    fichero.open(nomFichero, ios::binary | ios::in | ios::out); // SI QUITO ESTO ME DA ERROR
 
     if(fichero.fail()) {
         cout << "[!] ERROR: No se pudo abrir el fichero " << nomFichero << endl;
@@ -126,7 +129,7 @@ Golfista Torneo::consultar(int posicion) {
 
 
 
-// Método Buscar (PREGUNTAR AL PROFESOR POR QUE NO ME FUNCIONA CORRECTAMENTE)
+// Método Buscar (PREGUNTAR AL PROFESOR POR QUE NO ME FUNCIONA CORRECTAMENTE SI QUITO EL FICHERO.CLOSE())
 int Torneo::buscar(cadena licencia) {
 
     fichero.close(); // SI QUITO ESTO ME DA ERROR
@@ -156,11 +159,11 @@ int Torneo::buscar(cadena licencia) {
 
 
 
-// Método Insertar (Por Hacer)
+// Método Insertar (PREGUNTAR AL PROFESOR POR QUE NO ME FUNCIONA CORRECTAMENTE SI QUITO EL FICHERO.CLOSE())
 void Torneo::insertar(Golfista g) {
 
-    fichero.close();
-    fichero.open(nomFichero, ios::binary | ios::in | ios::out);
+    fichero.close(); // SI QUITO ESTO ME DA ERROR
+    fichero.open(nomFichero, ios::binary | ios::in | ios::out); // SI QUITO ESTO ME DA ERROR
 
     fichero.seekp(sizeof(int) + numGolfistas * sizeof(Golfista), ios::beg);
 
