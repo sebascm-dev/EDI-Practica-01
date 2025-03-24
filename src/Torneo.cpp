@@ -158,6 +158,20 @@ int Torneo::buscar(cadena licencia) {
 
 // Método Insertar (Por Hacer)
 void Torneo::insertar(Golfista g) {
+
+    fichero.close();
+    fichero.open(nomFichero, ios::binary | ios::in | ios::out);
+
+    fichero.seekp(sizeof(int) + numGolfistas * sizeof(Golfista), ios::beg);
+
+    fichero.write((char*) &g, sizeof(Golfista));
+
+    numGolfistas++;
+
+    fichero.seekp(0, ios::beg);
+
+    fichero.write((char*) &numGolfistas, sizeof(int));
+
 }
 
 

@@ -155,7 +155,38 @@ void menuPrincipal() {
 
             case 3: { // SIN RESOLVER
 
-                cout << "Opción 3" << endl;
+                system("cls");
+                cout << endl;
+                cout << "=== LISTADO DE TORNEOS ACTIVOS ===" << endl;
+                cout << endl;
+
+                for(int i = 0; i < numTorneos; i++){
+                    cadena nombre, fichero;
+                    tablaTorneos[i].getNomTorneo(nombre);
+                    tablaTorneos[i].getNomFichero(fichero);
+                    cout << (i+1) << ". " << nombre << " ---> (Archivo: " << fichero << ")" << endl;
+                }
+
+                int elegirTorneo;
+                cout << endl;
+                cout << "Elija el torneo: "; cin >> elegirTorneo; cout << endl;
+
+                cadena nombreFichero, nombreTorneo;
+                Torneo eleccionTorneo;
+
+                for(int i = 0; i < numTorneos ; i++){
+                    if(elegirTorneo == i){
+                        tablaTorneos[i].getNomFichero(nombreFichero);
+                        eleccionTorneo.putNomFichero(nombreFichero);
+                        eleccionTorneo.getNomFichero(nombreFichero);
+
+                        cout << nombreFichero << endl;
+                    }
+                }
+
+
+
+                system("pause");
                 break;
             }
 
@@ -183,6 +214,7 @@ int main()
 
     crearFicheroTorneo();
 
+    /*
     Torneo t1;
     cadena nombreTor, nombreFic;
 
@@ -222,6 +254,7 @@ int main()
 
 
     // PRUEBAS DEL METODO BUSCAR
+    /*
     cadena licencia;
     cout << "\nIndique la licencia a mostar: "; cin.getline(licencia, 30);
 
@@ -232,10 +265,27 @@ int main()
     } else {
         cout << "La licencia del golfista no se encuentra..." << endl;
     }
+    */
 
 
 
-    //menuPrincipal();
+    // PRUEBAS DE METODO INSERTAR
+    /*
+    Golfista g1;
+
+    cout << "Nombre Golfista: "; cin.getline(g1.nombre, 30); cout << endl;
+    cout << "Apellido Golfista: "; cin.getline(g1.apellidos, 30); cout << endl;
+    cout << "Licencia Golfista: "; cin.getline(g1.licencia, 30); cout << endl;
+    cout << "Handicap Golfista: "; cin >> g1.handicap; cout << endl;
+    cout << "Golpes Golfista: "; cin >> g1.golpes; cout << endl;
+    cout << "Resultado Golfista: "; cin >> g1.resultado; cout << endl;
+    t1.insertar(g1);
+    cout << "Golfista Introducido..." << endl;
+    */
+
+
+
+    menuPrincipal();
 
     delete[] tablaTorneos;
     return 0;
