@@ -147,6 +147,7 @@ void menuPrincipal() {
                     tablaTorneos[i].putNomTorneo(aux.nomTorneoAux);
                     tablaTorneos[i].putNomFichero(aux.nomFicheroAux);
                 }
+                fichero.close(); // AÑADIDO
 
                 cout << endl;
                 cout << "[OK] Operacion de Alta Torneo Completada!!!" << endl;
@@ -169,131 +170,138 @@ void menuPrincipal() {
                     cout << (i+1) << ". " << nombre << " --->\t(Archivo: " << fichero << ")" << endl;
                 }
 
+
                 int elegirTorneo;
                 cout << endl;
                 cout << "Elija el torneo: "; cin >> elegirTorneo; cout << endl;
                 elegirTorneo--;
 
-                cadena nombreFichero, nombreTorneo;
-                int numGolfistas;
-                Torneo eleccionTorneo;
+                if(elegirTorneo < numTorneos) {
+                    cadena nombreFichero, nombreTorneo;
+                    int numGolfistas;
+                    Torneo eleccionTorneo;
 
-                for(int i = 0; i < numTorneos ; i++){
-                    if(elegirTorneo == i){
-                        tablaTorneos[i].getNomFichero(nombreFichero);
-                        eleccionTorneo.putNomFichero(nombreFichero);
-                        eleccionTorneo.getNomFichero(nombreFichero);
+                    for(int i = 0; i < numTorneos ; i++){
+                        if(elegirTorneo == i){
+                            tablaTorneos[i].getNomFichero(nombreFichero);
+                            eleccionTorneo.putNomFichero(nombreFichero);
+                            eleccionTorneo.getNomFichero(nombreFichero);
 
-                        tablaTorneos[i].getNomTorneo(nombreTorneo);
-                        eleccionTorneo.putNomTorneo(nombreTorneo);
-                        eleccionTorneo.getNomTorneo(nombreTorneo);
+                            tablaTorneos[i].getNomTorneo(nombreTorneo);
+                            eleccionTorneo.putNomTorneo(nombreTorneo);
+                            eleccionTorneo.getNomTorneo(nombreTorneo);
 
-                        fstream archivoElegido;
-                        archivoElegido.open(nombreFichero, ios::binary | ios::in | ios::out);
+                            fstream archivoElegido;
+                            archivoElegido.open(nombreFichero, ios::binary | ios::in | ios::out);
 
-                        archivoElegido.seekg(0, ios::beg);
-                        archivoElegido.read((char*) &numGolfistas, sizeof(int));
+                            archivoElegido.seekg(0, ios::beg);
+                            archivoElegido.read((char*) &numGolfistas, sizeof(int));
 
-                        eleccionTorneo.putNumGolfistas(numGolfistas);
-                        archivoElegido.close();
+                            eleccionTorneo.putNumGolfistas(numGolfistas);
+                            archivoElegido.close();
+                        }
                     }
-                }
 
-                int menuOpc2 = 0;
-                do{
+                    int menuOpc2 = 0;
+                    do{
 
-                    system("cls");
-                    cout << endl;
+                        system("cls");
+                        cout << endl;
 
-                    cout << "Torneo " << nombreTorneo << endl;
-                    cout << "----------------------------------------------" << endl;
-                    cout << "Golfistas: " << numGolfistas << endl;
+                        cout << "Torneo " << nombreTorneo << endl;
+                        cout << "----------------------------------------------" << endl;
+                        cout << "Golfistas: " << numGolfistas << endl;
 
-                    cout << endl;
+                        cout << endl;
 
-                    cout << "\t1. Consulta de Inscripciones" << endl;
-                    cout << "\t2. Inscripcion al Torneo" << endl;
-                    cout << "\t3. Busqueda de una Inscripcion" << endl;
-                    cout << "\t4. Modificar Datos de una Inscripcion" << endl;
-                    cout << "\t5. Eliminar una Inscripcion" << endl;
-                    cout << "\t6. Mostrar Resultados del Torneo" << endl;
-                    cout << "\t7. Salir" << endl;
+                        cout << "\t1. Consulta de Inscripciones" << endl;
+                        cout << "\t2. Inscripcion al Torneo" << endl;
+                        cout << "\t3. Busqueda de una Inscripcion" << endl;
+                        cout << "\t4. Modificar Datos de una Inscripcion" << endl;
+                        cout << "\t5. Eliminar una Inscripcion" << endl;
+                        cout << "\t6. Mostrar Resultados del Torneo" << endl;
+                        cout << "\t7. Salir" << endl;
 
-                    cout << endl;
+                        cout << endl;
 
-                    cout << "Indique la opcion deseada: "; cin >> menuOpc2; cin.ignore();
+                        cout << "Indique la opcion deseada: "; cin >> menuOpc2; cin.ignore();
 
-                    system("cls");
-                    switch(menuOpc2){
+                        system("cls");
+                        switch(menuOpc2){
 
-                        case 1: {
-                            cout << endl;
-                            cout << "=== CONSULTA DE INSCRIPCIONES EN " << nombreTorneo << " ===" << endl;
-                            cout << endl;
+                            case 1: {
+                                cout << endl;
+                                cout << "=== CONSULTA DE INSCRIPCIONES EN " << nombreTorneo << " ===" << endl;
+                                cout << endl;
 
-                            eleccionTorneo.mostrar(-1);
-
-                            cout << endl;
-                            system("pause");
-                            break;
-                        }
-
-                        case 2: {
-                            cout << endl;
-                            cout << "=== INSCRIPCION AL TORNEO " << nombreTorneo << " ===" << endl;
-                            cout << endl;
-
-                            Golfista nuevoGolfista;
-
-                            cout << "[+] Introduzca un nombre: "; cin.getline(nuevoGolfista.nombre, 30);
-                            cout << "[+] Introduzca un apellido: "; cin.getline(nuevoGolfista.apellidos, 30);
-                            cout << "[+] Introduzca una licencia: "; cin.getline(nuevoGolfista.licencia, 30);
-                            cout << "[+] Introduzca su handicap: "; cin >> nuevoGolfista.handicap;
-                            cout << "[+] Introduzca los golpes: "; cin >> nuevoGolfista.golpes;
-                            cout << "[+] Introduzca el resultado: "; cin >> nuevoGolfista.resultado; cout << endl;
-
-                            eleccionTorneo.insertar(nuevoGolfista);
-                            numGolfistas++;
-
-                            cout << "[i] Golfista introducido con exito!" << endl;
-
-                            cout << endl;
-                            system("pause");
-                            break;
-                        }
-
-                        case 3: {
-                            cout << endl;
-                            cout << "=== BUSQUEDA DE UNA INSCRIPCION EN " << nombreTorneo << " ===" << endl;
-                            cout << endl;
-
-                            cadena licencia;
-
-                            cout << "[i] Introduzca la licencia del golfista: "; cin.getline(licencia, 30);
-
-                            int posicion = eleccionTorneo.buscar(licencia);
-
-                            if(posicion != -1) {
-                                Golfista encontrarGolfista = eleccionTorneo.consultar(posicion);
+                                eleccionTorneo.mostrar(-1);
 
                                 cout << endl;
-                                cout << "X--- " << encontrarGolfista.nombre << " " << encontrarGolfista.apellidos << " ---X" << endl;
-                                cout << "| Licencia: " << encontrarGolfista.licencia << endl;
-                                cout << "| Handicap: " << encontrarGolfista.handicap << endl;
-                                cout << "| Golpes: " << encontrarGolfista.golpes << endl;
-                                cout << "| Resultado: " << encontrarGolfista.resultado << endl;
-                            } else {
-                                cout << endl;
-                                cout << "[!] El golfista no se encuentra dentro del torneo." << endl;
+                                system("pause");
+                                break;
                             }
 
-                            cout << endl;
-                            system("pause");
-                            break;
-                        }
+                            case 2: {
+                                cout << endl;
+                                cout << "=== INSCRIPCION AL TORNEO " << nombreTorneo << " ===" << endl;
+                                cout << endl;
 
-                    }
-                } while(menuOpc2 != 7);
+                                Golfista nuevoGolfista;
+
+                                cout << "[+] Introduzca un nombre: "; cin.getline(nuevoGolfista.nombre, 30);
+                                cout << "[+] Introduzca un apellido: "; cin.getline(nuevoGolfista.apellidos, 30);
+                                cout << "[+] Introduzca una licencia: "; cin.getline(nuevoGolfista.licencia, 30);
+                                cout << "[+] Introduzca su handicap: "; cin >> nuevoGolfista.handicap;
+                                cout << "[+] Introduzca los golpes: "; cin >> nuevoGolfista.golpes;
+                                cout << "[+] Introduzca el resultado: "; cin >> nuevoGolfista.resultado; cout << endl;
+
+                                eleccionTorneo.insertar(nuevoGolfista);
+                                numGolfistas++;
+
+                                cout << "[i] Golfista introducido con exito!" << endl;
+
+                                cout << endl;
+                                system("pause");
+                                break;
+                            }
+
+                            case 3: {
+                                cout << endl;
+                                cout << "=== BUSQUEDA DE UNA INSCRIPCION EN " << nombreTorneo << " ===" << endl;
+                                cout << endl;
+
+                                cadena licencia;
+
+                                cout << "[i] Introduzca la licencia del golfista: "; cin.getline(licencia, 30);
+
+                                int posicion = eleccionTorneo.buscar(licencia);
+
+                                if(posicion != -1) {
+                                    Golfista encontrarGolfista = eleccionTorneo.consultar(posicion);
+
+                                    cout << endl;
+                                    cout << "X--- " << encontrarGolfista.nombre << " " << encontrarGolfista.apellidos << " ---X" << endl;
+                                    cout << "| Licencia: " << encontrarGolfista.licencia << endl;
+                                    cout << "| Handicap: " << encontrarGolfista.handicap << endl;
+                                    cout << "| Golpes: " << encontrarGolfista.golpes << endl;
+                                    cout << "| Resultado: " << encontrarGolfista.resultado << endl;
+                                } else {
+                                    cout << endl;
+                                    cout << "[!] El golfista no se encuentra dentro del torneo." << endl;
+                                }
+
+                                cout << endl;
+                                system("pause");
+                                break;
+                            }
+
+                        }
+                    } while(menuOpc2 != 7);
+
+                } else {
+                    cout << "[!] ERROR: No se encuentra el torneo insertado." << endl;
+                    system("pause");
+                }
 
                 break;
             }
