@@ -161,24 +161,57 @@ int Torneo::buscar(cadena licencia) {
 
 // Método Insertar (PREGUNTAR AL PROFESOR POR QUE NO ME FUNCIONA CORRECTAMENTE SI QUITO EL FICHERO.CLOSE())
 void Torneo::insertar(Golfista g) {
+    // Cerramos y reabrimos el fichero en modo lectura/escritura binaria
+    fichero.close();
+    fichero.open(nomFichero, ios::binary | ios::in | ios::out);
+    // Verificamos que no exista otro golfista con la misma licencia
+    if(buscar(g.licencia) != -1) {
+        cout << "[+] ERROR: Se ha encontrado una licencia igual. No se ha podido insertar el golfista dentro del torneo." << endl;
+    } else {
+        fichero.close();
+        fichero.open(nomFichero, ios::binary | ios::in | ios::out);
 
-    fichero.close(); // SI QUITO ESTO ME DA ERROR
-    fichero.open(nomFichero, ios::binary | ios::in | ios::out); // SI QUITO ESTO ME DA ERROR
+        int posInsercion = 0;
+        Golfista golfistaFichero;
+        fichero.seekg(0, ios::beg);
 
-    fichero.seekp(sizeof(int) + numGolfistas * sizeof(Golfista), ios::beg);
+        fichero.read((char*) &numGolfistas, sizeof(int));
 
-    fichero.write((char*) &g, sizeof(Golfista));
+        posInsercion = numGolfistas;
 
-    numGolfistas++;
+        for(int i = 0; i < numGolfistas  && posInsercion == numGolfistas; i++) {
+            fichero.read((char*) &golfistaFichero, sizeof(Golfista));
+            if(g.handicap < golfistaFichero.handicap) {
+                posInsercion = i;
+            }
+        }
+        cout << "[+] La posicion donde se insertara es el: " << posInsercion + 1 << endl;
 
-    fichero.seekp(0, ios::beg);
+        // Desplazamos desde atrás hacia adelante para hacer espacio
+        for(int i = numGolfistas - 1; i >= posInsercion; i--) {
+            fichero.seekg(sizeof(int) + i * sizeof(Golfista), ios::beg);
+            fichero.read((char*) &golfistaFichero, sizeof(Golfista));
+            fichero.seekp(sizeof(int) + (i + 1) * sizeof(Golfista), ios::beg);
+            fichero.write((char*) &golfistaFichero, sizeof(Golfista));
+        }
 
-    fichero.write((char*) &numGolfistas, sizeof(int));
+        // Insertamos el nuevo golfista en la posición correcta
+        fichero.seekp(sizeof(int) + (posInsercion * sizeof(Golfista)), ios::beg);
+        fichero.write((char*) &g, sizeof(Golfista));
 
+        // Actualizamos el número de golfistas
+        numGolfistas++;
+        fichero.seekp(0, ios::beg);
+        fichero.write((char*) &numGolfistas, sizeof(int));
+    }
 }
 
 
 
-// Método Modificar
+void modificar(Golfista c, int posicion) {
+
+}
+
+
 // Método Eliminar
 // Método Clasifciar

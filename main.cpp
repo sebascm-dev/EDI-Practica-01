@@ -82,7 +82,7 @@ void menuPrincipal() {
 
         switch (opcMenuPrincipal) {
 
-            case 1:{ // RESUELTO - LISTO PARA CORRECCIÓN CON EL PROFESOR
+            case 1:{ // RESUELTO
 
                 system("cls");
                 cout << endl;
@@ -101,7 +101,7 @@ void menuPrincipal() {
                 break;
             }
 
-            case 2: { // RESUELTO - LISTO PARA CORRECCIÓN CON EL PROFESOR
+            case 2: { // RESUELTO
 
                 system("cls");
                 cout << endl;
@@ -156,7 +156,7 @@ void menuPrincipal() {
                 break;
             }
 
-            case 3: { // SIN RESOLVER - CORREGIR Y OPINION DEL PROFESOR
+            case 3: { // EN PROGRESO
 
                 system("cls");
                 cout << endl;
