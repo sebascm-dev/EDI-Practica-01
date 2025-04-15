@@ -234,7 +234,14 @@ void menuPrincipal() {
                                 cout << "=== CONSULTA DE INSCRIPCIONES EN " << nombreTorneo << " ===" << endl;
                                 cout << endl;
 
-                                eleccionTorneo.mostrar(-1);
+                                float handicapBuscado;
+
+                                cout << "[?] Introduzca el handicap a consultar (-1 para mostrar todos): ";
+                                cin >> handicapBuscado;
+                                cin.ignore();
+                                cout << endl;
+
+                                eleccionTorneo.mostrar(handicapBuscado);
 
                                 cout << endl;
                                 system("pause");
@@ -252,10 +259,13 @@ void menuPrincipal() {
                                 cout << "[+] Introduzca un apellido: "; cin.getline(nuevoGolfista.apellidos, 30);
                                 cout << "[+] Introduzca una licencia: "; cin.getline(nuevoGolfista.licencia, 30);
                                 cout << "[+] Introduzca su handicap: "; cin >> nuevoGolfista.handicap;
-                                cout << "[+] Introduzca los golpes: "; cin >> nuevoGolfista.golpes;
-                                cout << "[+] Introduzca el resultado: "; cin >> nuevoGolfista.resultado; cout << endl;
+                                cout << endl;
+
+                                nuevoGolfista.golpes = 0;
+                                nuevoGolfista.resultado = 0;
 
                                 eleccionTorneo.insertar(nuevoGolfista);
+
                                 numGolfistas++;
 
                                 cout << "[i] Golfista introducido con exito!" << endl;
@@ -288,6 +298,101 @@ void menuPrincipal() {
                                 } else {
                                     cout << endl;
                                     cout << "[!] El golfista no se encuentra dentro del torneo." << endl;
+                                }
+
+                                cout << endl;
+                                system("pause");
+                                break;
+                            }
+
+                            case 4: {
+                                cout << endl;
+                                cout << "=== MODIFICAR DATOS DE UNA INSCRIPCION ===" << endl;
+                                cout << endl;
+
+                                cadena licencia;
+                                cout << "[?] Introduzca la licencia del golfista a modificar: ";
+                                cin.getline(licencia, 30);
+                                cout << endl;
+
+                                // 1. Buscar su posición en el fichero
+                                int pos = eleccionTorneo.buscar(licencia);
+
+                                if (pos == -1) {
+
+                                    cout << "[!] El golfista con licencia " << licencia << " no se encuentra inscrito en el torneo." << endl;
+
+                                } else {
+
+                                    // 2. Consultar los datos actuales (para poder conservar el handicap)
+                                    Golfista actual = eleccionTorneo.consultar(pos);
+
+                                    // Mostrar brevemente los datos que tenía antes
+                                    cout << "X--- " << actual.nombre << " " << actual.apellidos << " ---X" << endl;
+                                    cout << "| Licencia: " << actual.licencia << endl;
+                                    cout << "| Handicap: " << actual.handicap << endl;
+                                    cout << "| Golpes: " << actual.golpes << endl;
+                                    cout << "| Resultado: " << actual.resultado << endl;
+                                    cout << endl;
+
+                                    // 3. Pedir los datos nuevos.
+                                    Golfista modificado;
+
+                                    // Copiamos la licencia y handicap ANTES, para que no se pierdan.
+                                    strcpy(modificado.licencia, actual.licencia);
+                                    modificado.handicap = actual.handicap;
+
+                                    // Ahora pedimos sólo los datos que se pueden cambiar
+                                    cout << "[+] Introduzca el nuevo nombre: ";
+                                    cin.getline(modificado.nombre, 30);
+
+                                    cout << "[+] Introduzca el nuevo apellido: ";
+                                    cin.getline(modificado.apellidos, 30);
+
+                                    cout << "[+] Introduzca los nuevos golpes: ";
+                                    cin >> modificado.golpes;
+                                    cin.ignore();
+
+                                    cout << "[+] Introduzca el nuevo resultado: ";
+                                    cin >> modificado.resultado;
+                                    cin.ignore();
+
+                                    // 4. Llamar al método modificar, pasando el Golfista “modificado” y la posición
+                                    eleccionTorneo.modificar(modificado, pos);
+
+                                    cout << endl;
+                                    cout << "[OK] Modificacion realizada." << endl;
+                                }
+
+                                cout << endl;
+                                system("pause");
+                                break;
+                            }
+
+                            case 5: {
+                                cout << endl;
+                                cout << "=== ELIMINAR INSCRIPCION AL TORNEO ===" << endl;
+                                cout << endl;
+
+                                cadena licencia;
+                                cout << "[?] Introduzca la licencia del golfista a eliminar: ";
+                                cin.getline(licencia, 30);
+                                cout << endl;
+
+                                int posicion = eleccionTorneo.buscar(licencia);
+
+                                if (posicion == -1) {
+
+                                    cout << "[!] El golfista con licencia " << licencia << " no se encuentra inscrito en el torneo." << endl;
+
+                                } else {
+
+                                    eleccionTorneo.eliminar(posicion);
+
+                                    numGolfistas--;
+
+                                    cout << "[+] Golfista eliminado con exito" << endl;
+
                                 }
 
                                 cout << endl;

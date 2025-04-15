@@ -58,7 +58,6 @@ void Torneo::crearFichero(char nombreFichero[]) {
 
 
 
-// Método Mostrar (PREGUNTAR AL PROFESOR POR QUE NO ME FUNCIONA CORRECTAMENTE SI QUITO EL FICHERO.CLOSE())
 void Torneo::mostrar(float hdcp) {
 
     fichero.close(); // SI QUITO ESTO ME DA ERROR
@@ -87,7 +86,11 @@ void Torneo::mostrar(float hdcp) {
     Golfista g;
     int encontrados = 0;
 
-    while(fichero.read((char*) &g, sizeof(Golfista))) {
+    // En lugar de while(...), leemos exactamente numGolfistas registros
+    for(int i = 0; i < numGolfistas; i++) {
+        fichero.read((char*)&g, sizeof(Golfista));
+
+        // Filtramos por hdcp o mostramos todos
         if(hdcp == -1 || g.handicap == hdcp) {
             cout << endl;
             cout << "X--- " << g.nombre << " " << g.apellidos << " ---X" << endl;
@@ -110,7 +113,6 @@ void Torneo::mostrar(float hdcp) {
 
 
 
-// Método Consultar
 Golfista Torneo::consultar(int posicion) {
 
     Golfista g;
@@ -129,7 +131,6 @@ Golfista Torneo::consultar(int posicion) {
 
 
 
-// Método Buscar (PREGUNTAR AL PROFESOR POR QUE NO ME FUNCIONA CORRECTAMENTE SI QUITO EL FICHERO.CLOSE())
 int Torneo::buscar(cadena licencia) {
 
     fichero.close(); // SI QUITO ESTO ME DA ERROR
@@ -159,7 +160,6 @@ int Torneo::buscar(cadena licencia) {
 
 
 
-// Método Insertar (PREGUNTAR AL PROFESOR POR QUE NO ME FUNCIONA CORRECTAMENTE SI QUITO EL FICHERO.CLOSE())
 void Torneo::insertar(Golfista g) {
     // Cerramos y reabrimos el fichero en modo lectura/escritura binaria
     fichero.close();
@@ -208,10 +208,97 @@ void Torneo::insertar(Golfista g) {
 
 
 
-void modificar(Golfista c, int posicion) {
+void Torneo::modificar(Golfista c, int posicion) {
+    // 1. Comprobar si la posición es válida
+    if (posicion <= 0 || posicion > numGolfistas) {
+        cout << "[!] ERROR: La posición " << posicion << " no es válida." << endl;
+        return;
+    }
+
+    // 2. Cerrar y volver a abrir el fichero en binario lectura/escritura
+    fichero.close();
+    fichero.open(nomFichero, ios::binary | ios::in | ios::out);
+    if (fichero.fail()) {
+        cout << "[!] ERROR: No se pudo abrir el fichero para modificar." << endl;
+        return;
+    }
+
+    // 3. Leer el número de golfistas desde el fichero (por seguridad, aunque suele ser opcional
+    //    si ya sabemos numGolfistas en memoria)
+    int numeroGolfistasEnFichero;
+    fichero.seekg(0, ios::beg);
+    fichero.read((char*)&numeroGolfistasEnFichero, sizeof(int));
+
+    // 4. Ir hasta la posición solicitada y leer el golfista original
+    //    - posición en fichero = sizeof(int) + (posicion-1)*sizeof(Golfista)
+    fichero.seekg(sizeof(int) + (posicion - 1) * sizeof(Golfista), ios::beg);
+
+    Golfista original;
+    fichero.read((char*)&original, sizeof(Golfista));
+
+    // 5. Comprobar que sea el mismo golfista (opcional, según interpretación)
+    //    Si quieres asegurarte de que no cambien la licencia a alguien totalmente distinto:
+    if (strcmp(original.licencia, c.licencia) != 0) {
+        cout << "[!] ERROR: La licencia que se desea modificar ("
+             << c.licencia << ") no coincide con la del golfista en esa posición ("
+             << original.licencia << ")." << endl;
+        fichero.close();
+        return;
+    }
+
+    // 6. Conservar el hándicap original: "No se admite en la modificación cambiar el hándicap"
+    c.handicap = original.handicap;
+
+    // 7. Volver al inicio de la zona a escribir (la misma posición) y sobrescribir el registro
+    fichero.seekp(sizeof(int) + (posicion - 1) * sizeof(Golfista), ios::beg);
+    fichero.write((char*)&c, sizeof(Golfista));
 
 }
 
 
-// Método Eliminar
+
+void Torneo::eliminar(int posicion) {
+    // 1) Validar que la posición sea correcta
+    if (posicion <= 0 || posicion > numGolfistas) {
+        cout << "[!] ERROR: La posicion " << posicion << " no es valida. Debe estar entre 1 y " << numGolfistas << endl;
+        return;
+    }
+
+    // 2) Cerrar y reabrir el fichero en binario (lectura/escritura)
+    fichero.close();
+    fichero.open(nomFichero, ios::binary | ios::in | ios::out);
+
+    if (fichero.fail()) {
+        cout << "[!] ERROR: No se pudo abrir el fichero para eliminar." << endl;
+        return;
+    }
+
+    // 3) Leer el número de golfistas del fichero (para asegurarte de que coincida con numGolfistas)
+    int numeroGolfistas;
+    fichero.seekg(0, ios::beg);
+    fichero.read((char*)&numeroGolfistas, sizeof(int));
+
+    // 4) Desplazar a la izquierda todas las inscripciones que estén por detrás de la posición a eliminar
+    Golfista g;
+    for(int i = posicion - 1; i< numeroGolfistas - 1; i++) {
+        // Leer el golfista que está en la posición i+1
+        fichero.seekg(sizeof(int) + (i + 1) * sizeof(Golfista), ios::beg);
+        fichero.read((char*)&g, sizeof(Golfista));
+
+        // Escribirlo en la posición i
+        fichero.seekp(sizeof(int) + i * sizeof(Golfista), ios::beg);
+        fichero.write((char*)&g, sizeof(Golfista));
+    }
+
+    // 5) Actualizar la cantidad de golfistas
+    numeroGolfistas--;
+    fichero.seekp(0, ios::beg);
+    fichero.write((char*)&numeroGolfistas, sizeof(int));
+
+    // Sincronizar la variable interna de la clase también
+    numGolfistas = numeroGolfistas;
+}
+
+
+
 // Método Clasifciar
