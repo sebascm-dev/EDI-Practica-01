@@ -2,9 +2,12 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include <cstdlib>
+#include <ctime>
 
 // INCLUDES FICHEROS
 #include "Torneo.h"
+#include "Clasificacion.h"
 
 using namespace std;
 
@@ -30,7 +33,6 @@ void Torneo::putNomFichero(cadena nombre) { strcpy(nomFichero, nombre); }
 
 
 
-// Gestión de Ficheros
 void Torneo::crearFichero(char nombreFichero[]) {
 
     fichero.open(nombreFichero, ios::binary | ios::in | ios::out);
@@ -185,6 +187,7 @@ void Torneo::insertar(Golfista g) {
                 posInsercion = i;
             }
         }
+
         cout << "[+] La posicion donde se insertara es el: " << posInsercion + 1 << endl;
 
         // Desplazamos desde atrás hacia adelante para hacer espacio
@@ -301,4 +304,215 @@ void Torneo::eliminar(int posicion) {
 
 
 
-// Método Clasifciar
+bool Torneo::getGanadorTorneo(Golfista &g){
+    fichero.close();
+    fichero.open(nomFichero, ios::binary | ios::in | ios::out);
+
+    if (fichero.fail()) {
+        return false;
+    }
+
+    fichero.seekg(0, ios::beg);
+    fichero.read((char*) &numGolfistas, sizeof(int));
+
+    if (numGolfistas == 0) {
+        fichero.close();
+        return false;
+    }
+
+    bool torneoJugado = false;
+
+    fichero.seekg(sizeof(int), ios::beg);
+    fichero.read((char*) &g, sizeof(Golfista));
+
+    if(g.golpes != 0) {
+        torneoJugado = true;
+        cout << "(EL TORNEO HA SIDO JUGADO)" << endl;
+
+        Golfista aux;
+        Golfista ganadorTorneo;
+
+        fichero.seekg(sizeof(int), ios::beg);
+
+        for(int i = 0; i < numGolfistas; i++){
+            fichero.seekg(sizeof(int) + i * sizeof(Golfista));
+            fichero.read((char*) &g, sizeof(Golfista));
+            for(int j = 0; j < numGolfistas; j++){
+                fichero.seekg(sizeof(int) + j * sizeof(Golfista));
+                fichero.read((char*) &aux, sizeof(Golfista));
+                if(g.resultado < aux.resultado){
+                    ganadorTorneo = g;
+                }
+            }
+        }
+
+        g = ganadorTorneo;
+
+        cout << "El ganador es: " << g.nombre << " " << g.apellidos << "\t--> Resultado: " << g.resultado << endl;
+        cout << endl;
+        return true;
+    } else {
+        cout << "(EL TORNEO NO HA SIDO JUGADO)";
+        cout << endl;
+        return false;
+    }
+    if(torneoJugado == false){
+        return false;
+    }
+}
+
+
+
+bool Torneo::exportarGanadores(Torneo t[], int numT, cadena nombreFichero){
+    fstream ficheroTG;
+    ficheroTG.open("ganadoresTorneo.dat", ios::binary | ios::in | ios::out);
+
+    if (ficheroTG.fail()) {
+        ficheroTG.clear();
+        ficheroTG.close();
+
+        ficheroTG.open("ganadoresTorneo.dat", ios::binary | ios::out);
+        ficheroTG.close();
+
+        ficheroTG.open("ganadoresTorneo.dat", ios::binary | ios::in | ios::out);
+        cout << "\n[+] Fichero de torneos creado: ganadoresTorneo.dat\n" << endl;
+    } else {
+        int numeroGolfistasGanadores = 0;
+        ficheroTG.seekp(0, ios::beg);
+        ficheroTG.write((char*) &numeroGolfistasGanadores, sizeof(int));
+
+        Golfista g;
+        Golfista aux;
+        Golfista ganadorTorneo;
+
+        fichero.seekg(sizeof(int), ios::beg);
+
+        for(int i = 0; i < numGolfistas; i++){
+            fichero.seekg(sizeof(int) + i * sizeof(Golfista));
+            fichero.read((char*) &g, sizeof(Golfista));
+            for(int j = 0; j < numGolfistas; j++){
+                fichero.seekg(sizeof(int) + j * sizeof(Golfista));
+                fichero.read((char*) &aux, sizeof(Golfista));
+                if(g.resultado < aux.resultado){
+                    ganadorTorneo = g;
+                }
+            }
+        }
+
+        g = ganadorTorneo;
+
+        ficheroTG.seekp(sizeof(int), ios::beg);
+        ficheroTG.write((char*) &g, sizeof(Golfista));
+        numeroGolfistasGanadores++;
+    }
+}
+
+void Torneo::Clasificar() {
+    // 1) Cerrar el fichero (por si estaba abierto) y reabrirlo en modo lectura-escritura
+    fichero.close();
+    fichero.open(nomFichero, ios::binary | ios::in | ios::out);
+
+    if (fichero.fail()) {
+        cout << "[!] ERROR: No se pudo abrir el fichero para clasificar." << endl;
+        return;
+    }
+
+    // 2) Leer el número de golfistas al comienzo del fichero
+    fichero.seekg(0, ios::beg);
+    fichero.read((char*) &numGolfistas, sizeof(int));
+
+    if (numGolfistas == 0) {
+        cout << "[i] No hay golfistas inscritos. No hay nada que clasificar." << endl;
+        fichero.close();
+        return;
+    }
+
+    // 3) Creamos un objeto Clasificacion para guardar el índice y resultado de cada golfista
+    Clasificacion clasif;
+
+    // (Opcional) Iniciar la semilla de números aleatorios.
+    srand((unsigned) time(nullptr));
+
+    // 4) Para cada golfista:
+    //    - Leemos su registro
+    //    - Generamos golpes aleatorios
+    //    - Calculamos resultado
+    //    - Sobrescribimos en el fichero
+    //    - Añadimos a la tabla dinámica de "Clasificacion"
+    for (int i = 0; i < numGolfistas; i++) {
+        // Calculamos el offset para este golfista en el fichero
+        fichero.seekg(sizeof(int) + i * sizeof(Golfista), ios::beg);
+
+        Golfista g;
+        fichero.read((char*)&g, sizeof(Golfista));
+
+        // Generar golpes aleatorios (puedes variar el rango)
+        int golpesMin = 70;   // cerca de 72
+        int golpesMax = 120;  // máximo imaginario
+        g.golpes = golpesMin + rand() % (golpesMax - golpesMin + 1);
+
+        // Calcular resultado: golpes - par (72)
+        g.resultado = g.golpes - 72;
+
+        // Sobrescribir ahora los datos actualizados en el fichero
+        fichero.seekp(sizeof(int) + i * sizeof(Golfista), ios::beg);
+        fichero.write((char*)&g, sizeof(Golfista));
+
+        // Crear un Jugador con el índice en el fichero y el resultado calculado
+        Jugador j;
+        j.indice = i;               // i es la posición en el fichero (0-based)
+        j.resultado = g.resultado;
+
+        // Añadirlo a la Clasificacion
+        clasif.anadirjugador(j);
+    }
+
+    // Ya terminamos de modificar/reescribir; cerramos el fichero
+    fichero.close();
+
+    // 5) Ordenar la clasificación (burbuja interna de la clase Clasificacion)
+    clasif.ordenar();
+
+    // 6) Mostrar la clasificación final en orden de menor a mayor resultado
+
+    // Reabrimos el fichero solo en lectura para mostrar datos
+    fichero.open(nomFichero, ios::binary | ios::in);
+    if (fichero.fail()) {
+        cout << "[!] ERROR: No se pudo reabrir el fichero para mostrar la clasificación." << endl;
+        return;
+    }
+
+    int numeroGolfistas;
+    fichero.read((char*)&numeroGolfistas, sizeof(int));
+
+    cout << "=== CLASIFICACION FINAL DEL TORNEO ===" << endl;
+
+    // Recorremos la tabla ya ordenada
+    for (int k = 0; k < clasif.numjugadores(); k++) {
+        // Consultamos al objeto clasif
+        Jugador jj = clasif.consultar(k);
+
+        // Leemos el golfista correspondiente desde el fichero
+        fichero.seekg(sizeof(int) + jj.indice * sizeof(Golfista), ios::beg);
+
+        Golfista g;
+        fichero.read((char*)&g, sizeof(Golfista));
+
+        cout << "\nPosicion " << (k + 1) << ": " << g.nombre << " " << g.apellidos << endl;
+        cout << " Licencia: " << g.licencia << endl;
+        cout << " Handicap: " << g.handicap << endl;
+        cout << " Golpes:   " << g.golpes << endl;
+
+        // Si quieres mostrar "PAR" cuando resultado == 0
+        if (g.resultado == 0) {
+            cout << " Resultado: PAR" << endl;
+        } else if (g.resultado > 0) {
+            cout << " Resultado: +" << g.resultado << endl;
+        } else {
+            // Es negativo
+            cout << " Resultado: " << g.resultado << endl;
+        }
+    }
+
+    fichero.close();
+}

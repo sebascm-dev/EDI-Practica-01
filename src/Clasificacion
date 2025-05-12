@@ -1,0 +1,6 @@
+#include "Clasificacion."
+
+Clasificacion::Clasificacion()
+{
+    //ctor
+}

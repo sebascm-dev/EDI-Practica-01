@@ -13,7 +13,7 @@
 	<cstring>
 	"Torneo.h"
 
-1744728935 source:c:\users\spano\downloads\edi-practica-01\main.cpp
+1745445839 source:c:\users\spano\downloads\edi-practica-01\main.cpp
 	<iostream>
 	<fstream>
 	<cstring>
@@ -22,18 +22,22 @@
 1744726319 c:\users\spano\downloads\edi-practica-01\include\torneo.h
 	<fstream>
 
-1744729707 source:c:\users\spano\downloads\edi-practica-01\src\torneo.cpp
+1744732196 source:c:\users\spano\downloads\edi-practica-01\src\torneo.cpp
+	<iostream>
+	<fstream>
+	<cstring>
+	<cstdlib>
+	<ctime>
+	"Torneo.h"
+	"Clasificacion.h"
+
+1745445839 source:s:\edi-practica-01\main.cpp
 	<iostream>
 	<fstream>
 	<cstring>
 	"Torneo.h"
 
-1742253604 source:s:\edi-practica-01\main.cpp
-	<iostream>
-	<fstream>
-	"Torneo.h"
-
-1742253544 s:\edi-practica-01\include\torneo.h
+1744726319 s:\edi-practica-01\include\torneo.h
 	<fstream>
 
 1742253544 source:s:\edi-practica-01\src\torneo.cpp
@@ -41,4 +45,64 @@
 	<fstream>
 	<cstring>
 	"Torneo.h"
+
+1744731830 c:\users\spano\downloads\edi-practica-01\include\clasificacion.h
+	<iostream>
+
+1745441687 source:c:\users\spano\downloads\edi-practica-01\src\clasificacion.cpp
+	"Clasificacion.h"
+
+1745441687 source:s:\edi-practica-01\src\clasificacion.cpp
+	"Clasificacion.h"
+
+1744731830 s:\edi-practica-01\include\clasificacion.h
+	<iostream>
+
+1745492297 source:c:\users\usuario\desktop\edi-practica-01\main.cpp
+	<iostream>
+	<fstream>
+	<cstring>
+	"Torneo.h"
+
+1745488625 c:\users\usuario\desktop\edi-practica-01\include\torneo.h
+	<fstream>
+
+1745441687 source:c:\users\usuario\desktop\edi-practica-01\src\clasificacion.cpp
+	"Clasificacion.h"
+
+1744731830 c:\users\usuario\desktop\edi-practica-01\include\clasificacion.h
+	<iostream>
+
+1745492283 source:c:\users\usuario\desktop\edi-practica-01\src\torneo.cpp
+	<iostream>
+	<fstream>
+	<cstring>
+	<cstdlib>
+	<ctime>
+	"Torneo.h"
+	"Clasificacion.h"
+
+1745492297 source:e:\edi-practica-01-part2\main.cpp
+	<iostream>
+	<fstream>
+	<cstring>
+	"Torneo.h"
+
+1745488625 e:\edi-practica-01-part2\include\torneo.h
+	<fstream>
+
+1745441687 source:e:\edi-practica-01-part2\src\clasificacion.cpp
+	"Clasificacion.h"
+
+1744731830 e:\edi-practica-01-part2\include\clasificacion.h
+	<iostream>
+
+1745492283 source:e:\edi-practica-01-part2\src\torneo.cpp
+	<iostream>
+	<fstream>
+	<cstring>
+	<cstdlib>
+	<ctime>
+	"Torneo.h"
+	"Clasificacion.h"
 

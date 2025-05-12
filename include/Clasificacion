@@ -1,0 +1,15 @@
+#ifndef CLASIFICACION_
+#define CLASIFICACION_
+
+
+class Clasificacion
+{
+    public:
+        Clasificacion();
+
+    protected:
+
+    private:
+};
+
+#endif // CLASIFICACION_

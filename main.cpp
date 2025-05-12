@@ -1,3 +1,5 @@
+// SEBASTIAN CONTRERAS MARIN - spanolocabo@gmail.com
+
 // INCLUDES IMPORTANTES
 #include <iostream>
 #include <fstream>
@@ -76,13 +78,14 @@ void menuPrincipal() {
         cout << "\t1. Listado de Torneos" << endl;
         cout << "\t2. Alta Torneo" << endl;
         cout << "\t3. Elegir torneo" << endl;
-        cout << "\t4. Salir" << endl;
+        cout << "\t4. ExportarGanadores y Mostrarlos" << endl;
+        cout << "\t5. Salir" << endl;
         cout << endl;
         cout << "Indique la opcion deseada: "; cin >> opcMenuPrincipal; cin.ignore();
 
         switch (opcMenuPrincipal) {
 
-            case 1:{ // RESUELTO
+            case 1:{
 
                 system("cls");
                 cout << endl;
@@ -101,7 +104,7 @@ void menuPrincipal() {
                 break;
             }
 
-            case 2: { // RESUELTO
+            case 2: {
 
                 system("cls");
                 cout << endl;
@@ -156,7 +159,7 @@ void menuPrincipal() {
                 break;
             }
 
-            case 3: { // EN PROGRESO
+            case 3: {
 
                 system("cls");
                 cout << endl;
@@ -224,7 +227,11 @@ void menuPrincipal() {
 
                         cout << endl;
 
+                        Golfista g;
+                        eleccionTorneo.getGanadorTorneo(g);
+
                         cout << "Indique la opcion deseada: "; cin >> menuOpc2; cin.ignore();
+
 
                         system("cls");
                         switch(menuOpc2){
@@ -400,6 +407,16 @@ void menuPrincipal() {
                                 break;
                             }
 
+                            case 6: {
+                                cout << "=== MOSTRAR RESULTADOS DEL TORNEO ===" << endl << endl;
+
+                                eleccionTorneo.Clasificar(); // Simula el torneo y muestra la clasificación
+                                cout << endl;
+
+                                system("pause");
+                                break;
+                            }
+
                         }
                     } while(menuOpc2 != 7);
 
@@ -411,7 +428,25 @@ void menuPrincipal() {
                 break;
             }
 
-            case 4: { // RESUELTO
+            case 4: {
+
+                system("cls");
+                cout << endl;
+                cout << "=== EXPORTANDO Y MOSTRANDO GANADORES ===" << endl;
+                cout << endl;
+
+                for(int i = 0; i < numTorneos; i++){
+                    cadena nombre, fichero;
+                    tablaTorneos[i].getNomTorneo(nombre);
+                    tablaTorneos[i].getNomFichero(fichero);
+                }
+
+                system("cls");
+                cout << endl;
+                break;
+            }
+
+            case 5: {
 
                 system("cls");
                 cout << endl;
@@ -419,24 +454,25 @@ void menuPrincipal() {
                 break;
             }
 
-            default: { // RESUELTO
+            default: {
 
                 cout << "[!] ERROR: Escriba un valor valido..." << endl;
                 break;
             }
 
         }
-    } while (opcMenuPrincipal != 4);
+    } while (opcMenuPrincipal != 5);
 }
 
 
 
 int main()
 {
-
     crearFicheroTorneo();
+
     menuPrincipal();
 
     delete[] tablaTorneos;
+
     return 0;
 }

@@ -41,6 +41,8 @@ public:
     void insertar(Golfista g);
     void modificar(Golfista c, int posicion);
     void eliminar(int posicion);
+    bool getGanadorTorneo(Golfista &g);
+    bool exportarGanadores(Torneo t[], int numT, cadena nombreFichero);
     void Clasificar();
 };
 
